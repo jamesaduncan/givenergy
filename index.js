@@ -42,14 +42,21 @@ async function mk_api_getter ( url ) {
       headers: mk_headers(),
       body: new FormData()
     });
-    let response = await result.json();
-    if ( response.success ) {
-      return response;
+    if ( result.status == 200 ) {
+      if ( result.headers.get('set-cookie') ) {
+	cookie = result.headers.get('set-cookie').split(/;/)[0];
+      }
+      let response = await result.json();
+      if ( response.success ) {
+	return response;
+      } else {
+	throw {
+	  code: response.msgCode,
+	  message: error_codes[ response.msgCode ]
+	};
+      }
     } else {
-      throw {
-	code: response.msgCode,
-	message: error_codes[ response.msgCode ]
-      };
+      throw new Error(`HTTP Status ${result.status}`);
     }
   })();
 }
@@ -66,18 +73,8 @@ class GivEnergy {
     let fd  = url.searchParams;
     fd.append( 'account', this.username );
     fd.append( 'password', this.password );
-    
-    let result = await fetch(url, {
-      method: 'POST',
-      headers: mk_headers(),
-      body: new FormData(),
-      'redirect': 'follow'
-    });
 
-    let cookiestring = result.headers.get('set-cookie');
-    cookie = cookiestring.split(/;/)[0]
-    
-    let response = await result.json();    
+    let response = await (mk_api_getter( url ))
     if ( response.success ) {
       this.inverters = response.inverters.map( (e) => {
 	return new GivEnergy.Inverter( e.serialNum );
@@ -109,6 +106,5 @@ class Inverter {
 }
 
 GivEnergy.Inverter = Inverter;
-
 module.exports = GivEnergy;
 
