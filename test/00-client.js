@@ -28,8 +28,10 @@ tap.test("authenticate", async (t) => {
   tap.test("inverter detail", async( test ) => {
     let detail  = await client.inverters[0].detail;
     test.ok(detail, "got details about an inverter");
+    test.ok(detail.serialNum == client.inverters[0].id, "serial number matches");
     let current = await client.inverters[0].current;
     test.ok(current, "got details about current inverter status");
+    test.ok(current.status == 'NORMAL', "status normal");
   });
 });
 

@@ -35,6 +35,25 @@ function mk_headers () {
   return headers;
 }
 
+async function mk_api_getter ( url ) {
+  return ( async() => {
+    let result = await fetch(url, {
+      method: 'POST',
+      headers: mk_headers(),
+      body: new FormData()
+    });
+    let response = await result.json();
+    if ( response.success ) {
+      return response;
+    } else {
+      throw {
+	code: response.msgCode,
+	message: error_codes[ response.msgCode ]
+      };
+    }
+  })();
+}
+
 class GivEnergy {
 
   constructor( options = {} ) {
@@ -79,48 +98,14 @@ class Inverter {
 
   get current () {
     let url = new URL(`${root}/inverter/getInverterRuntime`, base);
-    url.searchParams.append( 'serialNum', this.id );
-    return ( async() => {
-      let result = await fetch(url, {
-	method: 'POST',
-	headers: mk_headers(),
-	body: new FormData()
-      });
-      let response = await result.json();
-      if ( response.success ) {
-	return response;
-      } else {
-	throw {
-	  code: response.msgCode,
-	  message: error_codes[ response.msgCode ]
-	};
-      }
-    })();
+    url.searchParams.append( 'serialNum', this.id )
+    return mk_api_getter( url )
   }
   
   get detail () {
     let url = new URL(`${root}/inverter/getInverterInfo`, base);        
     url.searchParams.append( 'serialNum', this.id );
-    if ( this.inverter_details ) return (async() => {
-      return this.inverter_details;
-    })();
-    else return (async() => {
-      let result = await fetch(url, {
-	method: 'POST',
-	headers: mk_headers(),
-	body: new FormData(),
-      });
-      let response = await result.json();
-      if ( response.success ) {
-	this.inverter_details = response;
-	return this.inverter_details;
-      } else {
-	throw {
-	  code: response.msgCode,
-	  message: error_codes[ response.msgCode ]
-	};
-      }      
-    })();
+    return mk_api_getter( url );
   }
 }
 
