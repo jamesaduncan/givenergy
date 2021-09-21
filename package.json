@@ -1,7 +1,7 @@
 {
   "name": "givenergy",
   "version": "1.0.0",
-  "description": "Node.js integration of givenergy api",
+  "description": "Node.js implementation of GivEnergy api (https://kb.givenergy.cloud/category.php?id=8)",
   "main": "index.js",
   "scripts": {
     "test": "tap"
