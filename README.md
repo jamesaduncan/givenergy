@@ -12,7 +12,7 @@ let client = new GivEnergy({
   username: 'a username',
   password: 'a password'
 });
-
+```
 
 ## authenticate the client
 
