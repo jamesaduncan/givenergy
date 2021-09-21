@@ -5,19 +5,22 @@ const FormData = require('form-data');
 const root = "/GivManage/api";
 const base = new URL("https://www.givenergy.cloud");
 
+let cookie = "";
+
+function mk_headers () {
+  let headers = {};
+  if ( cookie ) {
+    headers.Cookie = cookie;
+  }
+  return headers;
+}
+
 class GivEnergy {
 
   constructor( options = {} ) {
     Object.assign(this, options);
   }
 
-  get headers() {
-    let headers = {};
-    if ( this.cookie ) {
-      headers.Cookie = this.cookie;
-    }
-  }
-  
   async authenticate() {
     let url = new URL(`${root}/login`, base);
     let fd  = url.searchParams;
@@ -26,19 +29,18 @@ class GivEnergy {
     
     let result = await fetch(url, {
       method: 'POST',
-      headers: this.headers,
+      headers: mk_headers(),
       body: new FormData(),
       'redirect': 'follow'
     });
 
     let cookiestring = result.headers.get('set-cookie');
-    this.cookie = cookiestring.split(/;/)[0]
+    cookie = cookiestring.split(/;/)[0]
     
     let response = await result.json();    
-    console.log( response );
     if ( response.success ) {
       this.inverters = response.inverters.map( (e) => {
-	return new GivEnergy.Inverter( e );
+	return new GivEnergy.Inverter( e.serialNum );
       });
       this.authenticated = true;      
     } else {
@@ -53,6 +55,24 @@ class Inverter {
   constructor( id, options ) {
     this.id = id;
     Object.assign(this, options);
+  }
+
+  get detail () {
+    let url = new URL(`${root}/inverter/getInverterInfo`, base);        
+    url.searchParams.append( 'serialNum', this.id );
+    if ( this.inverter_details ) return (async() => {
+      return this.inverter_details;
+    })();
+    else return (async() => {
+      let result = await fetch(url, {
+	method: 'POST',
+	headers: mk_headers(),
+	body: new FormData(),
+      });
+      let response = await result.json();
+      this.inverter_details = response;
+      return this.inverter_details;
+    })();
   }
 }
 
