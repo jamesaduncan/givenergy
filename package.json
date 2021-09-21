@@ -1,0 +1,23 @@
+{
+  "name": "givenergy",
+  "version": "1.0.0",
+  "description": "Node.js integration of givenergy api",
+  "main": "index.js",
+  "scripts": {
+    "test": "tap"
+  },
+  "keywords": [
+    "givenergy",
+    "api",
+    "solar"
+  ],
+  "author": "James A. Duncan <jamesaduncan@me.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "dotenv": "^10.0.0",
+    "tap": "^15.0.9"
+  },
+  "dependencies": {
+    "form-data": "^4.0.0"
+  }
+}
