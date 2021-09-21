@@ -90,8 +90,10 @@ class Inverter {
       if ( response.success ) {
 	return response;
       } else {
-	console.log( response );
-	throw new Error( response );
+	throw {
+	  code: response.msgCode,
+	  message: error_codes[ response.msgCode ]
+	};
       }
     })();
   }
@@ -109,8 +111,15 @@ class Inverter {
 	body: new FormData(),
       });
       let response = await result.json();
-      this.inverter_details = response;
-      return this.inverter_details;
+      if ( response.success ) {
+	this.inverter_details = response;
+	return this.inverter_details;
+      } else {
+	throw {
+	  code: response.msgCode,
+	  message: error_codes[ response.msgCode ]
+	};
+      }      
     })();
   }
 }
