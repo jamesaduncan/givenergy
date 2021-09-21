@@ -16,12 +16,11 @@ tap.test("authenticate", async (t) => {
   t.ok(client.authenticated, `client is authenticated`);
 
   tap.test("inverter detail", async( test ) => {
-    let detail = await client.inverters[0].detail;
-    console.log( detail );
+    let detail  = await client.inverters[0].detail;
+    test.ok(detail, "got details about an inverter");
+    let current = await client.inverters[0].current;
+    test.ok(current, "got details about current inverter status");
   });
-
-
-
 });
 
 
