@@ -58,6 +58,7 @@ class GivEnergy {
 
   constructor( options = {} ) {
     Object.assign(this, options);
+    this.authenticated = false;
   }
 
   async authenticate() {
@@ -82,8 +83,6 @@ class GivEnergy {
 	return new GivEnergy.Inverter( e.serialNum );
       });
       this.authenticated = true;      
-    } else {
-      this.authenticated = false;     
     }
     return this.authenticated;
   }

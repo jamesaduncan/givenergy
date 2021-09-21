@@ -20,6 +20,12 @@ let client = new GivEnergy({
 await client.authenticate()
 ```
 
+## determine the client's authentication status
+
+```javascript
+if ( client.authenticated ) console.log("client is authenticated");
+```
+
 ## inverters
 
 ```javascript
