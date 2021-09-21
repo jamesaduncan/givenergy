@@ -1,6 +1,7 @@
 const url   = require('url');
 const fetch = require('node-fetch');
-const FormData = require('form-data');
+const FormData  = require('form-data');
+const HTTPErrors = require('./http-errors');
 
 const root = "/GivManage/api";
 const base = new URL("https://www.givenergy.cloud");
@@ -56,7 +57,8 @@ async function mk_api_getter ( url ) {
 	};
       }
     } else {
-      throw new Error(`HTTP Status ${result.status}`);
+      let err = HTTPError[ result.status ];
+      throw new err(result.statusText, result.status);
     }
   })();
 }
