@@ -7,25 +7,33 @@ so I've been implementing a node.js client to access it.
 
 ## create a client
 
-  let client = new GivEnergy({
-    username: 'a username',
-    password: 'a password'
-  });
+```javascript
+let client = new GivEnergy({
+  username: 'a username',
+  password: 'a password'
+});
 
 
 ## authenticate the client
 
-  await client.authenticate()
+```javascript
+await client.authenticate()
+```
 
 ## inverters
 
-  console.log( client.inverters );
+```javascript
+console.log( client.inverters );
+```
 
 ## inverter details
- 
-  let detail = await client.inverters[0].detail
+
+```javascript
+let detail = await client.inverters[0].detail
+```
 
 ## current power generation
 
-  let current = await client.inverters[0].current;
-
+```javascript
+let current = await client.inverters[0].current;
+```
