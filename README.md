@@ -1,8 +1,12 @@
 # A node.js API to the GivEnergy API
 
-GivEnergy is a British battery storage manufacturer, that mainly does things
-for Solar PV installations. They have an API into their battery storage system,
-so I've been implementing a node.js client to access it.
+GivEnergy is a British battery storage manufacturer, that mainly does
+things for Solar PV installations. They have an API into their battery
+storage system, so I've been implementing a node.js client to access
+it.
+
+This is not a complete implementation of their entire API, and is just
+a work in progress.
 
 
 ## create a client
