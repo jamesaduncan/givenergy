@@ -20,6 +20,7 @@ tap.test("authenticate", async (t) => {
       let i = new GivEnergy.Inverter( 'made up id');
       let detail = await i.detail;
     } catch(e) {
+      t.ok(e instanceof Error, "error is an instance of Error");
       t.ok(e.code == 150, "correct error code");
       t.ok(e.message == 'Unable to find the inverter', "error message is correct");
     }
