@@ -5,7 +5,7 @@ things for Solar PV installations. They have an API into their battery
 storage system, so I've been implementing a node.js client to access
 it.
 
-This is not a complete implementation of their entire API, and is just
+This is not yet a complete implementation of their entire API, and is just
 a work in progress.
 
 
