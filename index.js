@@ -36,13 +36,11 @@ function mk_headers () {
   return headers;
 }
 
-async function mk_api_getter ( url ) {
+async function mk_api_getter ( url, opts ) {
   return ( async() => {
-    let result = await fetch(url, {
-      method: 'POST',
-      headers: mk_headers(),
-      body: new FormData()
-    });
+    let fetch_options = { method: "POST", headers: mk_headers() }
+    Object.assign(fetch_options, opts);
+    let result = await fetch(url, fetch_options );
     if ( result.status == 200 ) {
       if ( result.headers.get('set-cookie') ) {
 	cookie = result.headers.get('set-cookie').split(/;/)[0];
@@ -57,7 +55,7 @@ async function mk_api_getter ( url ) {
 	};
       }
     } else {
-      let err = HTTPError[ result.status ];
+      let err = HTTPErrors[ result.status ];
       throw new err(result.statusText, result.status);
     }
   })();
@@ -72,9 +70,8 @@ class GivEnergy {
 
   async authenticate() {
     let url = new URL(`${root}/login`, base);
-    let fd  = url.searchParams;
-    fd.append( 'account', this.username );
-    fd.append( 'password', this.password );
+    url.searchParams.append( 'account', this.username );
+    url.searchParams.append( 'password', this.password );
 
     let response = await (mk_api_getter( url ))
     if ( response.success ) {

@@ -7,7 +7,7 @@ function createError(code, name) {
   return function(message) {
     Error.captureStackTrace(this, this.constructor);
     this.name = name;
-    this.message = message;
+    this.message = `HTTP Error ${code} - ${message}`;
     this.statusCode = code;
   }
 }
