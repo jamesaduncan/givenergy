@@ -34,6 +34,17 @@ tap.test("authenticate", async (t) => {
     test.ok(current, "got details about current inverter status");
     test.ok(current.status == 'NORMAL', "status normal");
   });
+
+  tap.test("plants", async( test ) => {
+    let plantList = await client.plants;
+    let info      = await plantList[0].info;
+    let summary   = await plantList[0].summary;
+    let current   = await plantList[0].current;
+    /* 
+       console.log(`Current PV power: ${summary.pvPower}, Grid Power: ${summary.gridPower}, Battery Power: ${summary.batPower}, Current Load: ${summary.loadPower}`);
+    */
+    let devices   = await plantList[0].devices;
+  });
 });
 
 

@@ -8,6 +8,8 @@ it.
 This is not yet a complete implementation of their entire API, and is just
 a work in progress.
 
+The API documentation is at GivEnergy's [knowledge base website](https://kb.givenergy.cloud/article.php?id=5).
+
 
 ## create a client
 
@@ -47,3 +49,37 @@ let detail = await client.inverters[0].detail
 ```javascript
 let current = await client.inverters[0].current;
 ```
+
+## get the plants connected to the system
+
+```javascript
+let plants = await client.plants;
+let plant  = plants[0];
+```
+
+## get information about a plant.
+
+```javascript
+let plants = await client.plants;
+await plants[0].info;
+```
+
+## get summary from a plant
+```javascript
+let plants = await client.plants;
+await plants[0].summary
+```
+
+## get current runtime information from a plant
+```javascript
+let plants = await client.plants;
+await plants[0].current;
+```
+
+## get devices attached to a plant
+```javascript
+let plants = await client.plants;
+await plants[0].devices;
+```
+
+

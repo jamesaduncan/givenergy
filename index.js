@@ -50,16 +50,59 @@ class GivEnergy {
     url.searchParams.append( 'account', this.username );
     url.searchParams.append( 'password', this.password );
 
-    let response = await (mk_api_getter( url ))
+    let response = await (mk_api_getter( url ));
     if ( response.success ) {
       this.inverters = response.inverters.map( (e) => {
 	return new GivEnergy.Inverter( e.serialNum );
       });
       this.authenticated = true;      
+      this.plants = (async () => {
+	try {
+	  let url = new URL(`${root}/plant/getPlantList`, base);
+	  let response = await (mk_api_getter(url));
+	  let plants = response.rows.map( (e) => {
+	    return new GivEnergy.Plant(e.plantId, e);
+	  });
+	  return plants;
+	} catch(e) {
+	  return null;
+	}
+      })();
     }
     return this.authenticated;
   }
   
+}
+
+class Plant {
+  constructor(id, options) {
+    this.id = id;
+    Object.assign(this, options);
+  }
+
+  get info () {
+    let url = new URL(`${root}/plant/getPlantInfo`, base);
+    url.searchParams.append( 'plantId', this.id );
+    return mk_api_getter( url );
+  }
+
+  get current () {
+    let url = new URL(`${root}/plant/getPlantRuntime`, base);
+    url.searchParams.append( 'plantId', this.id );
+    return mk_api_getter( url );
+  }
+
+  get devices () {
+    let url = new URL(`${root}/plant/getPlantDevices`, base);
+    url.searchParams.append( 'plantId', this.id );
+    return mk_api_getter( url );    
+  }
+
+  get summary () {
+    let url = new URL(`${root}/plant/getPlantSummary`, base);
+    url.searchParams.append( 'plantId', this.id );
+    return mk_api_getter( url );
+  }
 }
 
 class Inverter {
@@ -82,5 +125,6 @@ class Inverter {
 }
 
 GivEnergy.Inverter = Inverter;
+GivEnergy.Plant    = Plant;
 module.exports = GivEnergy;
 
